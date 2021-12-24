@@ -8,7 +8,7 @@ const AuthController = require('../controllers/AuthController')
 const userValidator = require('../middlewares/userValidator')
 
 //  Register User 
-router.post('/register', userValidator.ValidateUser, AuthController.UserRegister )
+router.post('/register', userValidator.ValidateUserRegister, AuthController.UserRegister )
 
 //  Login User
 
