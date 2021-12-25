@@ -39,9 +39,26 @@ const GetPostById = async (req, res) => {
     }
 }
 
+const CreatePost =  async (req, res) => {
+
+    if(req.body){
+        try {
+            const newPost = await new Post(req.body)
+            const savedPost = await newPost.save()
+            res.status(200).json(savedPost)
+        } catch (error) {
+            console.error(error)
+            res.status(500).json("There was an  error trying to create your post")
+        }
+    }
+
+    res.status(500).json("Internal Server Error: Please fill in all fields")
+
+}
+
 module.exports = {
 
     GetAllPosts,
     GetPostById,
-
+    CreatePost
 }

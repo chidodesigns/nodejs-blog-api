@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
 const PostController = require("../controllers/PostController")
+const postValidator = require("../middlewares/postValidator")
 
 
 //  Get All Posts
@@ -11,15 +12,7 @@ router.get("/", PostController.GetAllPosts)
 router.get("/:id", PostController.GetPostById)
 
 //  Create Post
-router.post("/", async(req, res) => {
-    const newPost = await new Post(req.body);
-    try {
-        const savedPost = await newPost.save();
-        res.status(200).json(savedPost);
-    } catch (error) {
-        res.status(500).json(error);
-    }
-});
+router.post("/", postValidator.ValidateCreatePost, PostController.CreatePost )
 
 //  Update Post
 router.put("/:id", async(req, res) => {
