@@ -3,17 +3,10 @@ const User = require("../models/User");
 const Post = require("../models/Post");
 const bcrypt = require("bcrypt")
 
-//  GET User
+const UsersController = require("../controllers/UsersController")
 
-router.get("/:id", async(req, res) => {
-    try {
-        const user = await User.findById(req.params.id)
-        const { password, ...others } = user._doc
-        res.status(200).json(others)
-    } catch (error) {
-        res.status(500).json(error)
-    }
-})
+//  GET User
+router.get("/:id", UsersController.GetUserById)
 
 //  Update User
 router.put("/:id", async(req, res) => {
