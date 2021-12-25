@@ -1,5 +1,4 @@
 const router = require("express").Router()
-const User = require("../models/Post")
 const Category = require("../models/Category")
 
 router.post("/", async (req, res) => {
