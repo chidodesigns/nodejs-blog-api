@@ -18,8 +18,20 @@ const CreateCategory = async (req, res) => {
 
 }
 
+const GetCategory = async (req, res) => {
+
+    try {
+        const cats = await Category.find()
+        res.status(200).json(cats)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json(error)
+    }
+
+}
 module.exports = {
 
     CreateCategory,
+    GetCategory
 
 }

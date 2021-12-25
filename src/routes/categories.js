@@ -1,30 +1,11 @@
 const router = require("express").Router()
-const Category = require("../models/Category")
+const CategoryController = require("../controllers/CategoryController")
+const categoryValidator = require("../middlewares/categoryValidator")
 
-router.post("/", async (req, res) => {
+router.post("/", categoryValidator.ValidateCreateCategory, CategoryController.CreateCategory )
 
-    const newCat = new Category(req.body)
+router.get("/" ,CategoryController.GetCategory )
 
-    try {
-        const savedCategory = await newCat.save()
-        res.status(200).json(savedCategory)
-        
-    } catch (error) {
-        res.status(500).json(error)
-    }
 
-})
-
-router.get("/", async (req, res) => {
-
-    try {
-        const cats = await Category.find()
-        res.status(200).json(cats)
-        
-    } catch (error) {
-        res.status(500).json(error)
-    }
-
-})
 
 module.exports = router
