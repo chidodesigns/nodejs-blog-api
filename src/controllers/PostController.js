@@ -56,9 +56,33 @@ const CreatePost =  async (req, res) => {
 
 }
 
+const UpdatePost = async (req, res) => {
+    if (req.params.id) {
+        try {
+            const post = await Post.findById(req.params.id)
+            if(post.username === req.body.username){
+                try {
+                    const updatedPost = await Post.findByIdAndUpdate(req.params.id, {
+                        $set: req.body,
+                    }, { new: true})
+                    res.status(200).json(updatedPost)
+                } catch (error) {
+                    console.error(error)
+                    res.status(500).json("There was an error trying to find and update the Post you was on!")
+                }
+            }
+        } catch (error) {
+            console.error(error)
+            res.status(404).json("There was an error trying to retrieve your post to update it!")
+        }
+    }
+    res.status(500).json("There was an interal server error because you tried to update a post without an ID")
+}
+
 module.exports = {
 
     GetAllPosts,
     GetPostById,
-    CreatePost
+    CreatePost,
+    UpdatePost
 }
