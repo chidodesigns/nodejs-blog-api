@@ -25,9 +25,23 @@ const GetAllPosts = async (req, res) => {
     }
 
 }
+const GetPostById = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id)
+        if (post){
+            res.status(200).json(post)
+        }else{
+            res.status(404).json("We could not find the post you was looking for")
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json("Internal server error whilst trying to load/access Post by ID")
+    }
+}
 
 module.exports = {
 
     GetAllPosts,
+    GetPostById,
 
 }
