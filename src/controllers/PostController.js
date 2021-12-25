@@ -18,10 +18,10 @@ const GetAllPosts = async (req, res) => {
         }else{
             posts = await Post.find()
         }
-        res.status(200).json(posts)
+        return res.status(200).json(posts)
     } catch (error) {
         console.error(error)
-        res.status(500).json("There was an error loading all the posts")
+        return res.status(500).json("There was an error loading all the posts")
     }
 
 }
@@ -29,13 +29,13 @@ const GetPostById = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id)
         if (post){
-            res.status(200).json(post)
+            return res.status(200).json(post)
         }else{
-            res.status(404).json("We could not find the post you was looking for")
+            return res.status(404).json("We could not find the post you was looking for")
         }
     } catch (error) {
         console.error(error)
-        res.status(500).json("Internal server error whilst trying to load/access Post by ID")
+        return res.status(500).json("Internal server error whilst trying to load/access Post by ID")
     }
 }
 
@@ -45,14 +45,14 @@ const CreatePost =  async (req, res) => {
         try {
             const newPost = await new Post(req.body)
             const savedPost = await newPost.save()
-            res.status(200).json(savedPost)
+            return res.status(200).json(savedPost)
         } catch (error) {
             console.error(error)
-            res.status(500).json("There was an  error trying to create your post")
+            return res.status(500).json("There was an  error trying to create your post")
         }
     }
 
-    res.status(500).json("Internal Server Error: Please fill in all fields")
+    return res.status(500).json("Internal Server Error: Please fill in all fields")
 
 }
 
@@ -65,18 +65,18 @@ const UpdatePost = async (req, res) => {
                     const updatedPost = await Post.findByIdAndUpdate(req.params.id, {
                         $set: req.body,
                     }, { new: true})
-                    res.status(200).json(updatedPost)
+                    return res.status(200).json(updatedPost)
                 } catch (error) {
                     console.error(error)
-                    res.status(500).json("There was an error trying to find and update the Post you was on!")
+                    return res.status(500).json("There was an error trying to find and update the Post you was on!")
                 }
             }
         } catch (error) {
             console.error(error)
-            res.status(404).json("There was an error trying to retrieve your post to update it!")
+            return res.status(404).json("There was an error trying to retrieve your post to update it!")
         }
     }
-    res.status(500).json("There was an interal server error because you tried to update a post without an ID")
+    return res.status(500).json("There was an interal server error because you tried to update a post without an ID")
 }
 
 const DeletePost = async (req, res) => {
@@ -87,20 +87,20 @@ const DeletePost = async (req, res) => {
             if (post.username === req.body.username) {
                 try {
                     await post.delete()
-                    res.status(200).json("Post has been deleted ...")
+                    return res.status(200).json("Post has been deleted ...")
                 } catch (error) {
                     console.error(error)
-                    res.status(500).json("There was an error trying to delete your post!")                }
+                    return res.status(500).json("There was an error trying to delete your post!")                }
             }else{
-                res.status(401).json("You can delete only post!")
+                return res.status(401).json("You can delete only post!")
             }
         } catch (error) {
             console.error(error)
-            res.status(404).json("There was an error: We could not find your post to be deleted")
+            return res.status(404).json("There was an error: We could not find your post to be deleted")
         }
 
     }
-    res.status(500).json("There was an interal server error because you tried to update a post without an ID")
+    return res.status(500).json("There was an interal server error because you tried to update a post without an ID")
    
 }
 

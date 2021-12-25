@@ -10,13 +10,13 @@ const GetUserById = async (req, res) => {
 
     if (user) {
       const { password, ...others } = user._doc;
-      res.status(200).json(others);
+      return res.status(200).json(others);
     } else {
-      res.status(400).json("User Profile not found");
+      return res.status(400).json("User Profile not found");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json("There was an error trying to get your user profile");
+    return res.status(500).json("There was an error trying to get your user profile");
   }
 };
 
@@ -36,15 +36,13 @@ const UpdateUserById = async (req, res) => {
         },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+      return res.status(200).json(updatedUser);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json("There was an error trying to update your user profile");
+      return res.status(500).json("There was an error trying to update your user profile");
     }
   } else {
-    res.status(401).json("You can update only your account");
+    return res.status(401).json("You can update only your account");
   }
 };
 
@@ -55,15 +53,15 @@ const UserDeleteAccount = async (req, res) => {
       try {
         await Post.deleteMany({ username: user.username });
         await User.findByIdAndDelete(req.params.id);
-        res.status(200).json("User has been deleted...");
+        return res.status(200).json("User has been deleted...");
       } catch (error) {
-        res.status(500).json(error);
+        return res.status(500).json(error);
       }
     } else {
-      res.status(404).json("User Not Found!");
+      return res.status(404).json("User Not Found!");
     }
   } else {
-    res.status(401).json("You can delete only your account");
+    return res.status(401).json("You can delete only your account");
   }
 };
 
