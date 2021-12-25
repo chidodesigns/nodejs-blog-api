@@ -79,10 +79,36 @@ const UpdatePost = async (req, res) => {
     res.status(500).json("There was an interal server error because you tried to update a post without an ID")
 }
 
+const DeletePost = async (req, res) => {
+    if((req.params.id)){
+
+        try {
+            const post = await Post.findById(req.params.id)
+            if (post.username === req.body.username) {
+                try {
+                    await post.delete()
+                    res.status(200).json("Post has been deleted ...")
+                } catch (error) {
+                    console.error(error)
+                    res.status(500).json("There was an error trying to delete your post!")                }
+            }else{
+                res.status(401).json("You can delete only post!")
+            }
+        } catch (error) {
+            console.error(error)
+            res.status(404).json("There was an error: We could not find your post to be deleted")
+        }
+
+    }
+    res.status(500).json("There was an interal server error because you tried to update a post without an ID")
+   
+}
+
 module.exports = {
 
     GetAllPosts,
     GetPostById,
     CreatePost,
-    UpdatePost
+    UpdatePost,
+    DeletePost
 }
