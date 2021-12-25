@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { Request }  = require('express');
 
-const hashPassword = async (password, saltRounds = 10) => {
+const HashPassword = async (password, saltRounds = 10) => {
     try {
         // Generate a salt
         const salt = await bcrypt.genSalt(saltRounds);
@@ -17,13 +17,20 @@ const hashPassword = async (password, saltRounds = 10) => {
     return null;
 };
 
-const ValidatePassword = async (enteredPassword, savedPassword) => {
+const ComparePassword = async (userObj, requestedPassword) => {
 
-    return await GeneratePassword(enteredPassword, salt) === savedPassword
+    const validatedPassword = await bcrypt.compare(requestedPassword, userObj.password)
+
+    if(validatedPassword){
+        return true
+    }else{
+        return false
+    }
+
 }
 
 const GenerateSignature = async (payload) => {
-    return jwt.sign(payload, process.env.APP_SECRET,{ expiresIn: '90d'})
+    return await jwt.sign(payload, process.env.APP_SECRET,{ expiresIn: '90d'})
 }
 
 const ValidateSignature = async () => {
@@ -42,8 +49,8 @@ const ValidateSignature = async () => {
 
 
 module.exports = {
-    hashPassword,
-    ValidatePassword,
+    HashPassword,
+    ComparePassword,
     GenerateSignature,
     ValidateSignature
 }
